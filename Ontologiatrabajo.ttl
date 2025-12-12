@@ -1,0 +1,176 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix ont: <http://tuproyecto.org/ontologiaAccidentes#> .
+
+
+# Clases principales
+ont:Accidente rdf:type owl:Class ;
+    rdfs:label "Accidente de Tráfico" .
+
+ont:Ubicacion rdf:type owl:Class ;
+    rdfs:label "Ubicación Geográfica" .
+
+ont:Conductor rdf:type owl:Class ;
+    rdfs:subClassOf foaf:Person ;
+    rdfs:label "Conductor Implicado" .
+
+ont:CondicionMeteorologica rdf:type owl:Class ;
+    rdfs:label "Condición Meteorológica" ;
+    rdfs:comment "El estado del tiempo en el momento del accidente." .
+
+
+ont:EstacionMeteorologica rdf:type owl:Class ;
+    rdfs:label "Estación Meteorológica" ;
+    rdfs:comment "La fuente de los datos meteorológicos (del CSV)." .
+
+ont:CapturaImagen rdf:type owl:Class ;
+    rdfs:label "Captura de Imagen en Tiempo Real" ;
+    rdfs:comment "Registro visual de un accidente o sus condiciones precursoras." .
+
+# Object Properties
+
+ont:hasUbicacion rdf:type owl:ObjectProperty ;
+    rdfs:domain ont:Accidente ;
+    rdfs:range ont:Ubicacion ;
+    rdfs:label "ocurre en la ubicación" .
+
+ont:ocurreEn rdf:type owl:ObjectProperty ;
+    rdfs:domain ont:Accidente ;
+    rdfs:range ont:CondicionMeteorologica ;
+    rdfs:label "tiene condición atmosférica" .
+
+ont:involucraConductor rdf:type owl:ObjectProperty ;
+    rdfs:domain ont:Accidente ;
+    rdfs:range ont:Conductor ;
+    rdfs:label "involucra a un conductor" .
+
+ont:documentadoPor rdf:type owl:ObjectProperty ;
+    rdfs:domain ont:Accidente ;
+    rdfs:range ont:CapturaImagen ;
+    rdfs:label "es documentado por una captura de imagen" .
+
+# Relaciones del Tiempo Atmosférico
+ont:tieneCondicionAtmosferica rdf:type owl:ObjectProperty ;
+    rdfs:domain ont:CondicionMeteorologica ;
+    rdfs:range ont:EstadoSuperficieCarretera ;
+    rdfs:label "tiene estado de superficie de carretera" .
+
+ont:datosProvienenDe rdf:type owl:ObjectProperty ;
+    rdfs:domain ont:CondicionMeteorologica ;
+    rdfs:range ont:EstacionMeteorologica ;
+    rdfs:label "los datos provienen de la estación" .
+
+
+# Data Properties
+
+ont:fecha rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:Accidente ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "fecha y hora del accidente" .
+
+ont:severidad rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:Accidente ;
+    rdfs:range xsd:string ;
+    rdfs:label "nivel de severidad (ej: leve, grave, mortal)" .
+
+ont:vehiculo rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:Accidente ;
+    rdfs:range xsd:string ;
+    rdfs:label "tipo de vehículo (coche,moto,autobús...)" .
+
+ont:distrito rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:Ubicacion ;
+    rdfs:range xsd:string   ;
+    rdfs:label "distrito del accidente" .
+
+ont:codedistrito rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:Ubicacion ;
+    rdfs:range xsd:integer ;
+    rdfs:label "código postal del lugar de los hechos (280..)" .
+
+ont:lugar rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:Ubicacion ;
+    rdfs:range xsd:string ;
+    rdfs:label "carretera y punto kilométrico (ej: M-30 km 15)" .
+
+geo:lat rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:Ubicacion ;
+    rdfs:range xsd:float ;
+    rdfs:label "latitud" .
+
+geo:long rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:Ubicacion ;
+    rdfs:range xsd:float ;
+    rdfs:label "longitud" .
+
+ont:temperaturaC rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:CondicionMeteorologica ;
+    rdfs:range xsd:float ;
+    rdfs:label "temperatura en grados Celsius" .
+
+ont:visibilidadMetros rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:CondicionMeteorologica ;
+    rdfs:range xsd:float ;
+    rdfs:label "visibilidad en metros" .
+
+ont:precipitacionMMH rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:CondicionMeteorologica ;
+    rdfs:range xsd:float ;
+    rdfs:label "tasa de precipitación en mm/h" .
+
+ont:aniosexp rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:Conductor ;
+    rdfs:range xsd:integer ;
+    rdfs:label "años de experiencia como conductor" .
+
+ont:borracho rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:Conductor ;
+    rdfs:range xsd:boolean  ;
+    rdfs:label "True si el conductor iba borracho, False en caso contrario" .
+
+ont:drogado rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:Conductor ;
+    rdfs:range xsd:boolean  ;
+    rdfs:label "True si el conductor iba drogado, False en caso contrario" .
+
+ont:urlImagen rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:CapturaImagen ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "URL de la imagen capturada" .
+
+ont:timestampCaptura rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:CapturaImagen ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "marca de tiempo de la captura de imagen" .
+
+ont:fuenteCaptura rdf:type owl:DatatypeProperty ;
+    rdfs:domain ont:CapturaImagen ;
+    rdfs:range xsd:string ;
+    rdfs:label "origen de la cámara (ej: camaraDGT-M30-1, webcamUsuario)" .
+
+# Instancias de Ejemplo
+
+ont:Accidente-20250520-001 rdf:type ont:Accidente ;
+    ont:fechaYHora "2025-05-20T08:30:00"^^xsd:dateTime ;
+    ont:severidad "Grave" ;
+    ont:hasUbicacion ont:Ubicacion-M30-15 ;
+    ont:tieneCondicionAtmosferica ont:Clima-LluviaIntensa ;
+    ont:documentadoPor ont:Captura-FotoDGT-1 .
+
+ont:Captura-FotoDGT-1 rdf:type ont:CapturaImagen ;
+    ont:urlImagen "http://servicios.dgt.es/camara/M-30/accidente-001.jpg"^^xsd:anyURI ;
+    ont:timestampCaptura "2025-05-20T08:30:15"^^xsd:dateTime ;
+    ont:fuenteCaptura "CamaraDGT-M30-KM15-Este" .
+
+ont:Clima-LluviaIntensa rdf:type ont:CondicionMeteorologica ;
+    ont:temperaturaC 12.5,xsd:float ;
+    ont:visibilidadMetros 200,xsd:float ;
+    ont:precipitacionMMH 5.2,xsd:float ;
+    ont:tieneEstadoSuperficie ont:CarreteraMojada .
+
+ont:CarreteraMojada rdf:type ont:EstadoSuperficieCarretera ;
+    rdfs:label "Superficie Mojada" .
